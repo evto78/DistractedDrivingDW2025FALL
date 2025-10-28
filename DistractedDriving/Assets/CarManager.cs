@@ -10,6 +10,8 @@ public class CarManager : MonoBehaviour
     public float steeringIntensity;
     public float wheelResistence;
     public float resetResistence;
+    public AnimationCurve turnCurve;
+    public float turnAngle;
     [Header("Camera")]
     public Transform camTransform; Vector3 camNormalPos;
     public Camera cam;
@@ -34,8 +36,10 @@ public class CarManager : MonoBehaviour
         InputManager();
         wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
 
+        ManageCarShake();
         ManageCameraShake();
         ManageUI();
+        ManageTurning();
         terrain.transform.position -=  currentSpeed * Time.deltaTime * Vector3.forward;
         if(terrain.transform.position.z < -250f) { terrain.transform.position += 250f * Vector3.forward; }
         currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime/2f);
@@ -69,6 +73,13 @@ public class CarManager : MonoBehaviour
         }
         currentSpeed = Mathf.Clamp(currentSpeed, minMaxSpeed.x, minMaxSpeed.y);
     }
+    void ManageTurning()
+    {
+        float yAngle;
+        if(steeringIntensity < 0) { yAngle = turnCurve.Evaluate(-steeringIntensity) * -turnAngle; }
+        else { yAngle = turnCurve.Evaluate(steeringIntensity) * turnAngle; }
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, yAngle, transform.localEulerAngles.z);
+    }
     void CameraShake(float intensity)
     {
         camShakeTimer = 0.5f;
@@ -79,6 +90,10 @@ public class CarManager : MonoBehaviour
         if (camShakeTimer <= 0) { camShakeTimer = 0f; camTransform.localPosition = camNormalPos; currentCamShakeTinensity = 0f; return; }
         camTransform.localPosition = camNormalPos + new Vector3(Random.Range(-currentCamShakeTinensity, currentCamShakeTinensity), Random.Range(-currentCamShakeTinensity/2f, currentCamShakeTinensity/2f), Random.Range(-currentCamShakeTinensity/3f, currentCamShakeTinensity/3f));
         camShakeTimer -= Time.deltaTime * currentCamShakeTinensity * 1.5f; currentCamShakeTinensity -= Time.deltaTime * currentCamShakeTinensity*1.5f;
+    }
+    void ManageCarShake()
+    {
+        transform.position = new Vector3(transform.position.x, Random.Range(0f,(currentSpeed/(minMaxSpeed.y/1f))), transform.position.y);
     }
     void ManageUI()
     {
