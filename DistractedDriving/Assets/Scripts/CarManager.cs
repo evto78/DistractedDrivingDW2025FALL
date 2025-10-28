@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+[System.Serializable]
 public class CarManager : MonoBehaviour
 {
+    [Header("Stats")]
+    public float drivingSpeed;
+    public float turningSpeed;
+    public float wheelResistence;
+    public float turnAngle;
     [Header("Steering")]
     public Transform wheel;
     public float steeringIntensity;
-    public float wheelResistence;
     public float resetResistence;
     public AnimationCurve turnCurve;
-    public float turnAngle;
+    public float currentTurn;
+    public float shakeAffectAngle;
     [Header("Camera")]
     public Transform camTransform; Vector3 camNormalPos;
     public Camera cam;
@@ -20,7 +25,6 @@ public class CarManager : MonoBehaviour
     float camShakeTimer;
     [Header("Driving")]
     public Transform terrain;
-    public float drivingSpeed;
     public float currentSpeed;
     public Vector2 minMaxSpeed;
     [Header("User Interface")]
@@ -30,29 +34,34 @@ public class CarManager : MonoBehaviour
     {
         camNormalPos = camTransform.localPosition;
         currentCamShakeTinensity = 0f;
+        currentTurn = transform.localEulerAngles.y;
     }
     void Update()
     {
         InputManager();
         wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
+        currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime / 2f);
 
-        ManageCarShake();
         ManageCameraShake();
         ManageUI();
         ManageTurning();
-        terrain.transform.position -=  currentSpeed * Time.deltaTime * Vector3.forward;
-        if(terrain.transform.position.z < -250f) { terrain.transform.position += 250f * Vector3.forward; }
-        currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime/2f);
+        Move();
+        ManageCarShake();
+
+    }
+    void Move()
+    {
+        transform.position += currentSpeed * Time.deltaTime * transform.forward;
     }
     void InputManager()
     {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            steeringIntensity -= Time.deltaTime * 2f * wheelResistence;
+            steeringIntensity -= Time.deltaTime * turningSpeed;
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            steeringIntensity += Time.deltaTime * 2f * wheelResistence;
+            steeringIntensity += Time.deltaTime * turningSpeed;
         }
         else
         {
@@ -78,7 +87,8 @@ public class CarManager : MonoBehaviour
         float yAngle;
         if(steeringIntensity < 0) { yAngle = turnCurve.Evaluate(-steeringIntensity) * -turnAngle; }
         else { yAngle = turnCurve.Evaluate(steeringIntensity) * turnAngle; }
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, yAngle, transform.localEulerAngles.z);
+        currentTurn += yAngle/2f;
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, transform.localEulerAngles.z);
     }
     void CameraShake(float intensity)
     {
@@ -93,7 +103,10 @@ public class CarManager : MonoBehaviour
     }
     void ManageCarShake()
     {
-        transform.position = new Vector3(transform.position.x, Random.Range(0f,(currentSpeed/(minMaxSpeed.y/1f))), transform.position.y);
+        shakeAffectAngle += Time.deltaTime * 2; if(shakeAffectAngle > 1) { shakeAffectAngle = -1; }
+        float shakeIntensity = (currentSpeed / (minMaxSpeed.y / 1f));
+        transform.position = new Vector3(transform.position.x, Random.Range(0f,shakeIntensity), transform.position.z);
+        steeringIntensity += shakeAffectAngle * Random.Range(0f, shakeIntensity) / 6f;
     }
     void ManageUI()
     {
