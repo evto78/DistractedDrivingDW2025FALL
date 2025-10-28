@@ -124,4 +124,8 @@ public class CarManager : MonoBehaviour
         kph.text = Mathf.RoundToInt(currentSpeed*2f) + " / KPH";
         kph.transform.parent.localScale = Vector3.one * (((currentSpeed*2f)/minMaxSpeed.y)+0.8f);
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Ob") { Destroy(gameObject); }
+    }
 }

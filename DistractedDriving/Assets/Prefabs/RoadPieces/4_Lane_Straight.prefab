@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2606853841248389874}
   - component: {fileID: 2383088010449816501}
   m_Layer: 0
-  m_Name: Road_Plane
+  m_Name: 4_Lane_Straight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
