@@ -2,14 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+[System.Serializable]
 public class CarManager : MonoBehaviour
 {
+    [Header("Stats")]
+    public float drivingSpeed;
+    public float turningSpeed;
+    public float turnAngle;
     [Header("Steering")]
     public Transform wheel;
     public float steeringIntensity;
-    public float wheelResistence;
     public float resetResistence;
+    public AnimationCurve turnCurve;
+    float currentTurn;
+    float shakeAffectAngle;
+    public float maxZTurn;
     [Header("Camera")]
     public Transform camTransform; Vector3 camNormalPos;
     public Camera cam;
@@ -17,38 +24,46 @@ public class CarManager : MonoBehaviour
     float currentCamShakeTinensity;
     float camShakeTimer;
     [Header("Driving")]
-    public Transform terrain;
-    public float drivingSpeed;
     public float currentSpeed;
     public Vector2 minMaxSpeed;
     [Header("User Interface")]
     public TextMeshProUGUI kph;
-
+    [Header("Effects")]
+    public Transform tireTreads;
+    [Header("Pizza Boxes")]
+    public List<PizzaBoxScript> pizzas;
     void Start()
     {
         camNormalPos = camTransform.localPosition;
         currentCamShakeTinensity = 0f;
+        currentTurn = transform.localEulerAngles.y;
     }
     void Update()
     {
         InputManager();
         wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
+        currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime / 2f);
 
         ManageCameraShake();
         ManageUI();
-        terrain.transform.position -=  currentSpeed * Time.deltaTime * Vector3.forward;
-        if(terrain.transform.position.z < -250f) { terrain.transform.position += 250f * Vector3.forward; }
-        currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime/2f);
+        ManageTurning();
+        Move();
+        ManageCarShake();
+
+    }
+    void Move()
+    {
+        transform.position += currentSpeed * Time.deltaTime * transform.forward;
     }
     void InputManager()
     {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            steeringIntensity -= Time.deltaTime * 2f * wheelResistence;
+            steeringIntensity -= Time.deltaTime * turningSpeed;
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            steeringIntensity += Time.deltaTime * 2f * wheelResistence;
+            steeringIntensity += Time.deltaTime * turningSpeed;
         }
         else
         {
@@ -68,6 +83,23 @@ public class CarManager : MonoBehaviour
             currentSpeed -= Time.deltaTime * drivingSpeed;
         }
         currentSpeed = Mathf.Clamp(currentSpeed, minMaxSpeed.x, minMaxSpeed.y);
+        //Tire Tracks
+        bool emitTracks = currentSpeed > minMaxSpeed.y / 6f && (steeringIntensity > 0.2f || steeringIntensity < 0.2f);
+        foreach (TrailRenderer tr in tireTreads.GetComponentsInChildren<TrailRenderer>()) { tr.emitting = emitTracks; }
+    }
+    void ManageTurning()
+    {
+        float yAngle;
+        if(steeringIntensity < 0) { yAngle = turnCurve.Evaluate(-steeringIntensity) * -turnAngle; }
+        else { yAngle = turnCurve.Evaluate(steeringIntensity) * turnAngle; }
+        currentTurn += (yAngle/2f)*((currentSpeed / minMaxSpeed.y) * 2f);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, ((Random.Range(yAngle/8f,yAngle)/turnAngle)*currentSpeed/(minMaxSpeed.y/2f))*maxZTurn);
+        foreach(PizzaBoxScript p in pizzas)
+        {
+            p.currentStability += (yAngle / turnAngle) * Time.deltaTime * 1.6f;
+            if(p.currentStability > 0) { p.currentStability -= Time.deltaTime; }
+            if(p.currentStability < 0) { p.currentStability += Time.deltaTime; }
+        }
     }
     void CameraShake(float intensity)
     {
@@ -80,8 +112,20 @@ public class CarManager : MonoBehaviour
         camTransform.localPosition = camNormalPos + new Vector3(Random.Range(-currentCamShakeTinensity, currentCamShakeTinensity), Random.Range(-currentCamShakeTinensity/2f, currentCamShakeTinensity/2f), Random.Range(-currentCamShakeTinensity/3f, currentCamShakeTinensity/3f));
         camShakeTimer -= Time.deltaTime * currentCamShakeTinensity * 1.5f; currentCamShakeTinensity -= Time.deltaTime * currentCamShakeTinensity*1.5f;
     }
+    void ManageCarShake()
+    {
+        shakeAffectAngle += Time.deltaTime * 2; if(shakeAffectAngle > 1) { shakeAffectAngle = -1; }
+        float shakeIntensity = (currentSpeed / minMaxSpeed.y)*170*Time.deltaTime;
+        transform.position = new Vector3(transform.position.x, Random.Range(0f,shakeIntensity), transform.position.z);
+        steeringIntensity += shakeAffectAngle * Random.Range(0f, shakeIntensity) / 40f;
+    }
     void ManageUI()
     {
         kph.text = Mathf.RoundToInt(currentSpeed*2f) + " / KPH";
+        kph.transform.parent.localScale = Vector3.one * (((currentSpeed*2f)/minMaxSpeed.y)+0.8f);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Ob") { Destroy(gameObject); }
     }
 }
