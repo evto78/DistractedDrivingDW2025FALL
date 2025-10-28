@@ -8,7 +8,6 @@ public class CarManager : MonoBehaviour
     [Header("Stats")]
     public float drivingSpeed;
     public float turningSpeed;
-    public float wheelResistence;
     public float turnAngle;
     [Header("Steering")]
     public Transform wheel;
@@ -17,6 +16,7 @@ public class CarManager : MonoBehaviour
     public AnimationCurve turnCurve;
     float currentTurn;
     float shakeAffectAngle;
+    public float maxZTurn;
     [Header("Camera")]
     public Transform camTransform; Vector3 camNormalPos;
     public Camera cam;
@@ -82,7 +82,7 @@ public class CarManager : MonoBehaviour
         }
         currentSpeed = Mathf.Clamp(currentSpeed, minMaxSpeed.x, minMaxSpeed.y);
         //Tire Tracks
-        bool emitTracks = currentSpeed > minMaxSpeed.y / 2f && (steeringIntensity > 0.2f || steeringIntensity < 0.2f);
+        bool emitTracks = currentSpeed > minMaxSpeed.y / 6f && (steeringIntensity > 0.2f || steeringIntensity < 0.2f);
         foreach (TrailRenderer tr in tireTreads.GetComponentsInChildren<TrailRenderer>()) { tr.emitting = emitTracks; }
     }
     void ManageTurning()
@@ -90,8 +90,8 @@ public class CarManager : MonoBehaviour
         float yAngle;
         if(steeringIntensity < 0) { yAngle = turnCurve.Evaluate(-steeringIntensity) * -turnAngle; }
         else { yAngle = turnCurve.Evaluate(steeringIntensity) * turnAngle; }
-        currentTurn += yAngle/2f;
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, transform.localEulerAngles.z);
+        currentTurn += (yAngle/2f)*((currentSpeed / minMaxSpeed.y) * 2f);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, (Random.Range(yAngle/8f,yAngle)/turnAngle)*5f);
     }
     void CameraShake(float intensity)
     {
@@ -107,9 +107,9 @@ public class CarManager : MonoBehaviour
     void ManageCarShake()
     {
         shakeAffectAngle += Time.deltaTime * 2; if(shakeAffectAngle > 1) { shakeAffectAngle = -1; }
-        float shakeIntensity = (currentSpeed / (minMaxSpeed.y / 1f));
+        float shakeIntensity = (currentSpeed / minMaxSpeed.y)*170*Time.deltaTime;
         transform.position = new Vector3(transform.position.x, Random.Range(0f,shakeIntensity), transform.position.z);
-        steeringIntensity += shakeAffectAngle * Random.Range(0f, shakeIntensity) / 6f;
+        steeringIntensity += shakeAffectAngle * Random.Range(0f, shakeIntensity) / 40f;
     }
     void ManageUI()
     {

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 83427869718843708}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2, y: 0, z: -1.5}
+  m_LocalPosition: {x: -1.2, y: 0.05, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -851,8 +851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drivingSpeed: 30
   turningSpeed: 1.5
-  wheelResistence: 1
-  turnAngle: 15
+  turnAngle: 4
   wheel: {fileID: 7092146452145554688}
   steeringIntensity: 0
   resetResistence: 0.5
@@ -894,7 +893,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529421370501928376}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9149da72c3ed4e44b42d00596a182d5, type: 3}
   m_Name: 
@@ -1614,7 +1613,7 @@ Transform:
   m_GameObject: {fileID: 3248714593979236691}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2, y: 0, z: 1.5}
+  m_LocalPosition: {x: -1.2, y: 0.05, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2666,7 +2665,7 @@ Transform:
   m_GameObject: {fileID: 7197045699181559139}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2, y: 0, z: -1.5}
+  m_LocalPosition: {x: 1.2, y: 0.05, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2907,7 +2906,7 @@ Transform:
   m_GameObject: {fileID: 7247943557286767626}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2, y: 0, z: 1.5}
+  m_LocalPosition: {x: 1.2, y: 0.05, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
