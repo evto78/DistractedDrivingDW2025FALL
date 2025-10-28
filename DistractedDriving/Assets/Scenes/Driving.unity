@@ -808,7 +808,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1525677677527370468, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
       propertyPath: baseStability
-      value: 0.7
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 1529421370501928376, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
       propertyPath: m_Name
@@ -878,6 +878,10 @@ PrefabInstance:
       propertyPath: pizzas.Array.data[4]
       value: 
       objectReference: {fileID: 1480276444}
+    - target: {fileID: 5428425195631279030, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: baseStability
+      value: 1.6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
