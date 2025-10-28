@@ -428,6 +428,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353761322}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1480276444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1525677677527370468, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+  m_PrefabInstance: {fileID: 7042275712232614540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe6434bfb9cdc489c75157d23baa5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1557048005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6186453978105432418, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+  m_PrefabInstance: {fileID: 7042275712232614540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe6434bfb9cdc489c75157d23baa5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1576843960
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,6 +553,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1912833451 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5428425195631279030, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+  m_PrefabInstance: {fileID: 7042275712232614540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe6434bfb9cdc489c75157d23baa5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2024343063 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2676499563725779220, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+  m_PrefabInstance: {fileID: 7042275712232614540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe6434bfb9cdc489c75157d23baa5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2094253650
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,6 +787,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098175158}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4237964081463749432 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8306965591852600744, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+  m_PrefabInstance: {fileID: 7042275712232614540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0fe6434bfb9cdc489c75157d23baa5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7042275712232614540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -751,6 +806,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1525677677527370468, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: baseStability
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 1529421370501928376, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
       propertyPath: m_Name
       value: Car
@@ -795,6 +854,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4871733167541094175, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: pizzas.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871733167541094175, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: pizzas.Array.data[0]
+      value: 
+      objectReference: {fileID: 4237964081463749432}
+    - target: {fileID: 4871733167541094175, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: pizzas.Array.data[1]
+      value: 
+      objectReference: {fileID: 1557048005}
+    - target: {fileID: 4871733167541094175, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: pizzas.Array.data[2]
+      value: 
+      objectReference: {fileID: 2024343063}
+    - target: {fileID: 4871733167541094175, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: pizzas.Array.data[3]
+      value: 
+      objectReference: {fileID: 1912833451}
+    - target: {fileID: 4871733167541094175, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: pizzas.Array.data[4]
+      value: 
+      objectReference: {fileID: 1480276444}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -30,6 +30,8 @@ public class CarManager : MonoBehaviour
     public TextMeshProUGUI kph;
     [Header("Effects")]
     public Transform tireTreads;
+    [Header("Pizza Boxes")]
+    public List<PizzaBoxScript> pizzas;
     void Start()
     {
         camNormalPos = camTransform.localPosition;
@@ -91,7 +93,13 @@ public class CarManager : MonoBehaviour
         if(steeringIntensity < 0) { yAngle = turnCurve.Evaluate(-steeringIntensity) * -turnAngle; }
         else { yAngle = turnCurve.Evaluate(steeringIntensity) * turnAngle; }
         currentTurn += (yAngle/2f)*((currentSpeed / minMaxSpeed.y) * 2f);
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, (Random.Range(yAngle/8f,yAngle)/turnAngle)*5f);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, ((Random.Range(yAngle/8f,yAngle)/turnAngle)*currentSpeed/(minMaxSpeed.y/2f))*maxZTurn);
+        foreach(PizzaBoxScript p in pizzas)
+        {
+            p.currentStability += (yAngle / turnAngle) * Time.deltaTime * 1.6f;
+            if(p.currentStability > 0) { p.currentStability -= Time.deltaTime; }
+            if(p.currentStability < 0) { p.currentStability += Time.deltaTime; }
+        }
     }
     void CameraShake(float intensity)
     {
@@ -114,5 +122,6 @@ public class CarManager : MonoBehaviour
     void ManageUI()
     {
         kph.text = Mathf.RoundToInt(currentSpeed*2f) + " / KPH";
+        kph.transform.parent.localScale = Vector3.one * (((currentSpeed*2f)/minMaxSpeed.y)+0.8f);
     }
 }
