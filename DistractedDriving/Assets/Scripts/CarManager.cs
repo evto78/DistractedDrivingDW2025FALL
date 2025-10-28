@@ -15,8 +15,8 @@ public class CarManager : MonoBehaviour
     public float steeringIntensity;
     public float resetResistence;
     public AnimationCurve turnCurve;
-    public float currentTurn;
-    public float shakeAffectAngle;
+    float currentTurn;
+    float shakeAffectAngle;
     [Header("Camera")]
     public Transform camTransform; Vector3 camNormalPos;
     public Camera cam;
@@ -24,12 +24,12 @@ public class CarManager : MonoBehaviour
     float currentCamShakeTinensity;
     float camShakeTimer;
     [Header("Driving")]
-    public Transform terrain;
     public float currentSpeed;
     public Vector2 minMaxSpeed;
     [Header("User Interface")]
     public TextMeshProUGUI kph;
-
+    [Header("Effects")]
+    public Transform tireTreads;
     void Start()
     {
         camNormalPos = camTransform.localPosition;
@@ -81,6 +81,9 @@ public class CarManager : MonoBehaviour
             currentSpeed -= Time.deltaTime * drivingSpeed;
         }
         currentSpeed = Mathf.Clamp(currentSpeed, minMaxSpeed.x, minMaxSpeed.y);
+        //Tire Tracks
+        bool emitTracks = currentSpeed > minMaxSpeed.y / 2f && (steeringIntensity > 0.2f || steeringIntensity < 0.2f);
+        foreach (TrailRenderer tr in tireTreads.GetComponentsInChildren<TrailRenderer>()) { tr.emitting = emitTracks; }
     }
     void ManageTurning()
     {
