@@ -53,6 +53,7 @@ public class JoyconDemo : MonoBehaviour {
 				model = Instantiate(prefab, transform);
 
 			}
+			orientation = j.GetOrientation();
 			gameObject.transform.localRotation = orientation;
 
 			return;
@@ -98,7 +99,7 @@ public class JoyconDemo : MonoBehaviour {
             // Accel values:  x, y, z axis values (in Gs)
             accel = j.GetAccel();
 
-            orientation = j.GetOrientation();
+            
 
         }
     }
