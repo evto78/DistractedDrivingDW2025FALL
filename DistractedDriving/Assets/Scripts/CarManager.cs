@@ -5,6 +5,9 @@ using TMPro;
 [System.Serializable]
 public class CarManager : MonoBehaviour
 {
+    //can drive bool to stop for obstcles
+    public bool canDrive = true;
+
     [Header("Stats")]
     public float drivingSpeed;
     public float turningSpeed;
@@ -32,6 +35,9 @@ public class CarManager : MonoBehaviour
     public Transform tireTreads;
     [Header("Pizza Boxes")]
     public List<PizzaBoxScript> pizzas;
+
+    
+
     void Start()
     {
         camNormalPos = camTransform.localPosition;
@@ -74,7 +80,7 @@ public class CarManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space)) { CameraShake(1f); }
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if (canDrive == true && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow ))
         {
             currentSpeed += Time.deltaTime * drivingSpeed;
         }
