@@ -54,8 +54,8 @@ public class CarManager : MonoBehaviour
         currentCamShakeTinensity = 0f;
         currentTurn = transform.localEulerAngles.y;
         controllerManager = GetComponent<ControllerManager>();
-        paused = true;
-        StartCoroutine(IntroSetUp());
+        //paused = true;
+        //StartCoroutine(IntroSetUp());
     }
     void Update()
     {
