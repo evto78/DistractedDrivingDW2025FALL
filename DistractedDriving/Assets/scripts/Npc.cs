@@ -8,6 +8,8 @@ public class Npc : MonoBehaviour
     public Animator animation;
     public GameObject npc;
     CarManager car;
+
+    bool collided = false;
     void Start()
     {
         car = FindObjectOfType<CarManager>();
@@ -15,9 +17,9 @@ public class Npc : MonoBehaviour
 
     void Update()
     {
-        if(car.horned == true)
+        if(collided == true && car.horn==true)
         {
-            //gameObject.SetActive(false);
+            animation.enabled = false;
             car.canDrive = true;
         }
     }
@@ -28,6 +30,9 @@ public class Npc : MonoBehaviour
         {
             
             StartCoroutine(Npcs());
+
+            collided = true;
+
         }
     }
 
