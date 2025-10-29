@@ -14,6 +14,7 @@ public class CarManager : MonoBehaviour
     public float turningSpeed;
     public float turnAngle;
     [Header("Steering")]
+    public bool joyConSteering;
     public Transform wheel;
     public float steeringIntensity;
     public float resetResistence;
@@ -84,20 +85,26 @@ public class CarManager : MonoBehaviour
     }
     void InputManager()
     {
-        //if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    steeringIntensity -= Time.deltaTime * turningSpeed;
-        //}
-        //else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        //{
-        //   steeringIntensity += Time.deltaTime * turningSpeed;
-        //}
-        //else
-        //{
-        //    if(steeringIntensity > 0) { steeringIntensity -= Time.deltaTime * resetResistence; if (steeringIntensity < 0) { steeringIntensity = 0; } }
-        //    if(steeringIntensity < 0) { steeringIntensity += Time.deltaTime * resetResistence; if (steeringIntensity > 0) { steeringIntensity = 0; } }
-        //}
-        steeringIntensity = Mathf.Lerp(steeringIntensity, controllerManager.gyro.y / 5f, Time.deltaTime * 10);
+        if (!joyConSteering)
+        {
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                steeringIntensity -= Time.deltaTime * turningSpeed;
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+               steeringIntensity += Time.deltaTime * turningSpeed;
+            }
+            else
+            {
+                if(steeringIntensity > 0) { steeringIntensity -= Time.deltaTime * resetResistence; if (steeringIntensity < 0) { steeringIntensity = 0; } }
+                if(steeringIntensity < 0) { steeringIntensity += Time.deltaTime * resetResistence; if (steeringIntensity > 0) { steeringIntensity = 0; } }
+            }
+        }
+        else
+        {
+            steeringIntensity = Mathf.Lerp(steeringIntensity, controllerManager.gyro.y / 5f, Time.deltaTime * 10);
+        }
         steeringIntensity = Mathf.Clamp(steeringIntensity, -1f, 1f);
 
         if (Input.GetKeyDown(KeyCode.Space)) { CameraShake(1f); }
