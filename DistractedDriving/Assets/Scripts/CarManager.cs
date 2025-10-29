@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 [System.Serializable]
 public class CarManager : MonoBehaviour
 {
@@ -31,21 +32,30 @@ public class CarManager : MonoBehaviour
     public Vector2 minMaxSpeed;
     [Header("User Interface")]
     public TextMeshProUGUI kph;
+    ControllerManager controllerManager;
+    bool paused;
+    public GameObject setupUI;
+    public GameObject setupText1;
+    public GameObject setupText2; public Image radialFillCircle; float stayStillTimer; public TextMeshProUGUI stayStillText;
+    public GameObject setupText3;
     [Header("Effects")]
     public Transform tireTreads;
     [Header("Pizza Boxes")]
     public List<PizzaBoxScript> pizzas;
-
-    
 
     void Start()
     {
         camNormalPos = camTransform.localPosition;
         currentCamShakeTinensity = 0f;
         currentTurn = transform.localEulerAngles.y;
+        controllerManager = GetComponent<ControllerManager>();
+        paused = true;
+        StartCoroutine(IntroSetUp());
     }
     void Update()
     {
+        if (paused) { return; }
+
         InputManager();
         wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
         currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime / 2f);
@@ -133,5 +143,40 @@ public class CarManager : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Ob") { Destroy(gameObject); }
+    }
+
+    IEnumerator IntroSetUp()
+    {
+        setupUI.SetActive(true);
+        setupText1.SetActive(true);
+        setupText2.SetActive(false);
+        setupText3.SetActive(false);
+        while (!controllerManager.buttonsPressed)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        setupText1.SetActive(false);
+        setupText2.SetActive(true);
+        stayStillTimer = 0f;
+        while (stayStillTimer < 5.3f)
+        {
+            if (Mathf.Abs(controllerManager.accelMagnitude-1) < 0.5f) { stayStillTimer += Time.deltaTime; } else { stayStillTimer = 0f; }
+            radialFillCircle.fillAmount = stayStillTimer / 5f; stayStillText.text = Mathf.RoundToInt(5-stayStillTimer).ToString();
+            yield return new WaitForEndOfFrame();
+        }
+        controllerManager.Recenter();
+        setupText2.SetActive(false);
+        setupText3.SetActive(true);
+        while (!controllerManager.buttonsPressed)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        //Done setup
+        setupUI.SetActive(false);
+        setupText1.SetActive(false);
+        setupText2.SetActive(false);
+        setupText3.SetActive(false);
+        paused = false; yield return null;
     }
 }
