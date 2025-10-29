@@ -43,6 +43,10 @@ public class CarManager : MonoBehaviour
     [Header("Pizza Boxes")]
     public List<PizzaBoxScript> pizzas;
 
+    public AudioSource horn;
+
+    public bool horned = false;
+
     void Start()
     {
         camNormalPos = camTransform.localPosition;
@@ -65,8 +69,22 @@ public class CarManager : MonoBehaviour
         ManageTurning();
         Move();
         ManageCarShake();
+        honk();
 
     }
+
+    //Honking feature
+    void honk()
+    {
+        
+            if (controllerManager.buttonsPressed)
+            {
+               horn.Play();
+            horned = true;
+        }
+            Debug.Log("Honk!");
+    }
+
     void Move()
     {
         transform.position += currentSpeed * Time.deltaTime * transform.forward;
