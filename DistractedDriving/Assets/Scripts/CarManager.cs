@@ -42,7 +42,7 @@ public class CarManager : MonoBehaviour
     public Transform tireTreads;
     [Header("Pizza Boxes")]
     public List<PizzaBoxScript> pizzas;
-
+    [Header("Audio")]
     public AudioSource horn;
 
     public bool horned = false;
@@ -61,6 +61,7 @@ public class CarManager : MonoBehaviour
         if (paused) { return; }
 
         InputManager();
+
         wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
         currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime / 2f);
 
@@ -69,22 +70,14 @@ public class CarManager : MonoBehaviour
         ManageTurning();
         Move();
         ManageCarShake();
-        honk();
-
     }
-
     //Honking feature
-    void honk()
+    void Honk()
     {
-        
-            if (controllerManager.buttonsPressed)
-            {
-               horn.Play();
-            horned = true;
-        }
-            Debug.Log("Honk!");
+        if(horn == null) { return; }
+        horn.Play();
+        Debug.Log("Honk!");
     }
-
     void Move()
     {
         transform.position += currentSpeed * Time.deltaTime * transform.forward;
@@ -107,6 +100,7 @@ public class CarManager : MonoBehaviour
         steeringIntensity = Mathf.Clamp(steeringIntensity, -1f, 1f);
 
         if (Input.GetKeyDown(KeyCode.Space)) { CameraShake(1f); }
+        if (controllerManager.buttonsPressed || Input.GetKey(KeyCode.Space)) { Honk(); } horned = controllerManager.buttonsPressed || Input.GetKey(KeyCode.Space);
 
         if (canDrive == true && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow ))
         {
@@ -169,7 +163,7 @@ public class CarManager : MonoBehaviour
         setupText1.SetActive(true);
         setupText2.SetActive(false);
         setupText3.SetActive(false);
-        while (!controllerManager.buttonsPressed)
+        while (!controllerManager.buttonsPressed && !Input.GetKey(KeyCode.Space))
         {
             yield return new WaitForEndOfFrame();
         }
@@ -185,7 +179,7 @@ public class CarManager : MonoBehaviour
         controllerManager.Recenter();
         setupText2.SetActive(false);
         setupText3.SetActive(true);
-        while (!controllerManager.buttonsPressed)
+        while (!controllerManager.buttonsPressed && !Input.GetKey(KeyCode.Space))
         {
             yield return new WaitForEndOfFrame();
         }
