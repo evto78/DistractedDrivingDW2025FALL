@@ -23,7 +23,7 @@ public class adManager : MonoBehaviour
 
             // Decide if we should play an ad (20% chance)
             float chance = Random.value; // value between 0.0 and 1.0
-            if (chance <= 0.2f)
+            if (chance <= 0.5f)
             {
                 // Pick a random ad
                 int randomChoice = Random.Range(0, 2);
