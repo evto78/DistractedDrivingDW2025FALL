@@ -13907,6 +13907,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1423922289870014812, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9354f50cc9374d44981cf87f1b0e98f8, type: 3}
+    - target: {fileID: 1423922289870014812, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1423922289870014812, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1423922289870014812, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1529421370501928376, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
       propertyPath: m_Name
       value: Car
@@ -13963,8 +13979,29 @@ PrefabInstance:
       propertyPath: deadMoneyEarnedText
       value: 
       objectReference: {fileID: 1410461123}
+    - target: {fileID: 4996666030019743301, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996666030019743301, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996666030019743301, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996666030019743301, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996666030019743301, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2429485804203296880, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
