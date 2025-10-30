@@ -55,6 +55,7 @@ public class CarManager : MonoBehaviour
     public NavMeshAgent agent; float agentTimer = 0;
     public float deliveryTimer = 100; public Image phoneFill; public TextMeshProUGUI phoneTimer;
     public int moneyEarned = 0; public TextMeshProUGUI moneyEarnedText; public TextMeshProUGUI deadMoneyEarnedText; public GameObject deathUI;
+    int deliverysMade = 1;
     [Header("Audio")]
     public AudioSource horn;
 
@@ -170,7 +171,7 @@ public class CarManager : MonoBehaviour
             if(p.currentStability < 0) { p.currentStability += Time.deltaTime; }
         }
     }
-    void CameraShake(float intensity)
+    public void CameraShake(float intensity)
     {
         camShakeTimer = 0.5f;
         currentCamShakeTinensity += intensity * camShakeIntensityModifier;
@@ -196,6 +197,11 @@ public class CarManager : MonoBehaviour
         kph.text = Mathf.RoundToInt(currentSpeed*1f) + " / KPH";
         kph.transform.parent.localScale = Vector3.one * (((currentSpeed*2f)/minMaxSpeed.y)+0.8f);
         moneyEarnedText.text = moneyEarned + ".00$";
+
+        if(targetPoint != null)
+        {
+            targetPoint.IconUpdate(deliveryTimer / (32f / (deliverysMade / 2f)));
+        }
     }
     public void Crash()
     {
@@ -205,11 +211,12 @@ public class CarManager : MonoBehaviour
         GameObject explosion = Instantiate(explosionEffect);
         explosion.transform.position = transform.position;
         explosion.transform.rotation = transform.rotation;
+        explosion.GetComponent<CarExplosion>().crashVel = transform.forward * currentSpeed;
         Destroy(gameObject);
     }
     public void PickUpPizza()
     {
-        if(pizzas.Count < 1) { deliveryTimer = 30f; }
+        if(pizzas.Count < 1) { deliveryTimer = 32f / (deliverysMade / 2f); }
         pizzas.Clear();
         if(pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
         Instantiate(pizzaSetPrefab, pizzaSpawnPos);
@@ -221,7 +228,7 @@ public class CarManager : MonoBehaviour
     }
     public void Deliver()
     {
-        moneyEarned += Mathf.RoundToInt(pizzas.Count * (deliveryTimer / 15f));
+        moneyEarned += Mathf.RoundToInt(pizzas.Count * (deliveryTimer / (16f/(deliverysMade/2f))));
 
 
         pizzas.Clear();
@@ -229,7 +236,8 @@ public class CarManager : MonoBehaviour
 
         targetPoint = null;
         phone.ChangeState(PhoneScript.state.pickup);
-        deliveryTimer = 30f;
+        deliveryTimer = 32f / (deliverysMade / 2f);
+        deliverysMade++;
     }
     public void ManagePointer()
     {
