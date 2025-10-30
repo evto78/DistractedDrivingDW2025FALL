@@ -32,7 +32,7 @@ public class ControllerManager : MonoBehaviour
             connectedJoycon.SetRumble(160, 320, 0.6f, 200);
         }
         else { buttonsPressed = false; }
-        
+        //Debug.Log(connectedJoycon.)
     }
     public void Recenter()
     {
