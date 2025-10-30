@@ -6,7 +6,6 @@ public class Npc : MonoBehaviour
 {
 
     public Animator anim;
-    public GameObject npc;
     CarManager car;
     ControllerManager controller;
     public GameObject granny;
@@ -34,7 +33,7 @@ public class Npc : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("NpcCheck"))
         {
             Debug.Log("Player collided with NPC");
             StartCoroutine(Npcs());
