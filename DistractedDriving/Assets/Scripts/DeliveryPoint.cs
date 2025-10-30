@@ -15,6 +15,7 @@ public class DeliveryPoint : MonoBehaviour
         carCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<BoxCollider>();
         carManager = carCollider.gameObject.GetComponent<CarManager>();
         myCollider = GetComponent<BoxCollider>();
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame

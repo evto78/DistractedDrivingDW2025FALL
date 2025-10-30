@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.AI;
 [System.Serializable]
 public class CarManager : MonoBehaviour
 {
@@ -48,6 +49,11 @@ public class CarManager : MonoBehaviour
     public List<PizzaBoxScript> pizzas;
     public GameObject pizzaSetPrefab;
     public Transform pizzaSpawnPos;
+    public Transform deliverPoints;
+    public DeliveryPoint targetPoint;
+    public NavMeshAgent agent; float agentTimer = 0;
+    public float deliveryTimer = 100; public Image phoneFill; public TextMeshProUGUI phoneTimer;
+    public int moneyEarned = 0; public TextMeshProUGUI moneyEarnedText; public TextMeshProUGUI deadMoneyEarnedText; public GameObject deathUI;
     [Header("Audio")]
     public AudioSource horn;
 
@@ -55,6 +61,7 @@ public class CarManager : MonoBehaviour
 
     void Start()
     {
+        deliveryTimer = 99999999f; phoneTimer.text = "...";
         joyConTurnProgress = 0f;
         camNormalPos = camTransform.localPosition;
         currentCamShakeTinensity = 0f;
@@ -81,6 +88,7 @@ public class CarManager : MonoBehaviour
 
         ManageCameraShake();
         ManageUI();
+        ManagePointer();
         ManageTurning();
         Move();
         ManageCarShake();
@@ -180,11 +188,18 @@ public class CarManager : MonoBehaviour
     }
     void ManageUI()
     {
-        kph.text = Mathf.RoundToInt(currentSpeed*2f) + " / KPH";
+        deliveryTimer -= Time.deltaTime; phoneFill.fillAmount = deliveryTimer / 30f; phoneTimer.text = Mathf.RoundToInt(deliveryTimer).ToString();
+        if(deliveryTimer < 0) { Crash(); }
+        if(deliveryTimer > 100) { phoneTimer.text = "..."; }
+        kph.text = Mathf.RoundToInt(currentSpeed*1f) + " / KPH";
         kph.transform.parent.localScale = Vector3.one * (((currentSpeed*2f)/minMaxSpeed.y)+0.8f);
+        moneyEarnedText.text = moneyEarned + ".00$";
     }
     public void Crash()
     {
+        deathUI.SetActive(true);
+        deadMoneyEarnedText.text += moneyEarnedText.text;
+
         GameObject explosion = Instantiate(explosionEffect);
         explosion.transform.position = transform.position;
         explosion.transform.rotation = transform.rotation;
@@ -192,17 +207,45 @@ public class CarManager : MonoBehaviour
     }
     public void PickUpPizza()
     {
+        if(pizzas.Count < 1) { deliveryTimer = 30f; }
         pizzas.Clear();
         if(pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
         Instantiate(pizzaSetPrefab, pizzaSpawnPos);
         pizzas.AddRange(pizzaSpawnPos.GetComponentsInChildren<PizzaBoxScript>());
         phone.ChangeState(PhoneScript.state.dropoff);
+
+        targetPoint = deliverPoints.GetChild(Random.Range(0, deliverPoints.childCount)).GetComponent<DeliveryPoint>();
+        targetPoint.gameObject.SetActive(true);
     }
     public void Deliver()
     {
+        moneyEarned += Mathf.RoundToInt(pizzas.Count * (deliveryTimer / 15f));
+
+
         pizzas.Clear();
         if (pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
+
+        targetPoint = null;
         phone.ChangeState(PhoneScript.state.pickup);
+        deliveryTimer = 30f;
+    }
+    public void ManagePointer()
+    {
+        if (agent.isActiveAndEnabled) { agent.isStopped = true; }
+        agentTimer -= Time.deltaTime; if(agentTimer < 0) { agentTimer = 0.05f; } else { return; }
+        if(targetPoint == null) { return; }
+        //Debug.Log("Spawn");
+        NavMeshAgent agentClone = Instantiate(agent.gameObject, null).GetComponent<NavMeshAgent>();
+        agentClone.gameObject.SetActive(true);
+        agentClone.isStopped = false;
+        agentClone.transform.position = transform.position;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(targetPoint.transform.position, out hit, 10f, NavMesh.AllAreas))
+        {
+            agentClone.destination = hit.position;
+        }
+        Destroy(agentClone.gameObject, 1f);
+
     }
     IEnumerator IntroSetUp()
     {
