@@ -15,6 +15,7 @@ public class CarManager : MonoBehaviour
     public float turnAngle;
     [Header("Steering")]
     public bool joyConSteering;
+    public float joyConTurnProgress;
     public Transform wheel;
     public float steeringIntensity;
     public float resetResistence;
@@ -54,12 +55,16 @@ public class CarManager : MonoBehaviour
 
     void Start()
     {
+        joyConTurnProgress = 0f;
         camNormalPos = camTransform.localPosition;
         currentCamShakeTinensity = 0f;
         currentTurn = transform.localEulerAngles.y;
         controllerManager = GetComponent<ControllerManager>();
-        //paused = true;
-        //StartCoroutine(IntroSetUp());
+        if (joyConSteering)
+        {
+            paused = true;
+            StartCoroutine(IntroSetUp());
+        }
     }
     void Update()
     {
@@ -67,7 +72,11 @@ public class CarManager : MonoBehaviour
 
         InputManager();
 
-        wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
+        if (joyConSteering) { JoyconTurningWheel(); }
+        else
+        {
+            wheel.transform.localEulerAngles = steeringIntensity * -480 * Vector3.forward;
+        }
         currentSpeed = Mathf.Lerp(currentSpeed, minMaxSpeed.x, Time.deltaTime / 2f);
 
         ManageCameraShake();
@@ -86,6 +95,15 @@ public class CarManager : MonoBehaviour
     void Move()
     {
         transform.position += currentSpeed * Time.deltaTime * transform.forward;
+    }
+    void JoyconTurningWheel()
+    {
+        //Quaternion curRotation = wheel.localRotation;
+        //wheel.transform.localRotation = controllerManager.orientation;
+        //wheel.transform.localEulerAngles = (Vector3.forward * wheel.transform.localEulerAngles.x) + Vector3.forward * 90f;
+        //Quaternion tarRotation = wheel.localRotation;
+        //wheel.localRotation = Quaternion.Lerp(curRotation, tarRotation, Time.deltaTime * 4f);
+        wheel.localEulerAngles += -Vector3.forward * controllerManager.gyro.y/2f;
     }
     void InputManager()
     {
@@ -107,7 +125,8 @@ public class CarManager : MonoBehaviour
         }
         else
         {
-            steeringIntensity = Mathf.Lerp(steeringIntensity, controllerManager.gyro.y / 5f, Time.deltaTime * 10);
+            joyConTurnProgress += controllerManager.gyro.y/25f;
+            steeringIntensity = Mathf.Lerp(steeringIntensity, joyConTurnProgress/5f, Time.deltaTime * 10);
         }
         steeringIntensity = Mathf.Clamp(steeringIntensity, -1f, 1f);
 
@@ -178,6 +197,12 @@ public class CarManager : MonoBehaviour
         Instantiate(pizzaSetPrefab, pizzaSpawnPos);
         pizzas.AddRange(pizzaSpawnPos.GetComponentsInChildren<PizzaBoxScript>());
         phone.ChangeState(PhoneScript.state.dropoff);
+    }
+    public void Deliver()
+    {
+        pizzas.Clear();
+        if (pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
+        phone.ChangeState(PhoneScript.state.pickup);
     }
     IEnumerator IntroSetUp()
     {

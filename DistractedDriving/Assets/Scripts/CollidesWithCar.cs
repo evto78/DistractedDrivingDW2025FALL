@@ -17,6 +17,7 @@ public class CollidesWithCar : MonoBehaviour
     {
         if (carCollider == null) { return; }
         if (Vector3.Distance(carCollider.transform.position, transform.position) > 160) { return; }
+        //if ((carCollider.ClosestPoint(myCollider.transform.position) + myCollider.ClosestPoint(carCollider.transform.position)).magnitude < 1) { Debug.Log("COLLISION WITH " + gameObject.name); carManager.Crash(); }
         if (carCollider.bounds.Intersects(myCollider.bounds)) { Debug.Log("COLLISION WITH " + gameObject.name); carManager.Crash(); }
     }
 }

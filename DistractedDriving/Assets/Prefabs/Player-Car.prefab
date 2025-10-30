@@ -1500,7 +1500,8 @@ MonoBehaviour:
   drivingSpeed: 30
   turningSpeed: 1.5
   turnAngle: 4
-  joyConSteering: 0
+  joyConSteering: 1
+  joyConTurnProgress: 0
   wheel: {fileID: 7092146452145554688}
   steeringIntensity: 0
   resetResistence: 0.5
@@ -2720,7 +2721,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1488341232205730037
 Transform:
   m_ObjectHideFlags: 0
@@ -6558,7 +6559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7122653916733979753
 Transform:
   m_ObjectHideFlags: 0
