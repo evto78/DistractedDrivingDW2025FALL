@@ -48,7 +48,7 @@ public class Npc : MonoBehaviour
         granny.SetActive(true);
         anim.enabled = true;
         //Debug.Log("NPC collided with Player");
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.01f);
         car.currentSpeed = 0;
         car.canDrive = false;
         canLeave = true;
