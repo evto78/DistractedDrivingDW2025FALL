@@ -9,6 +9,7 @@ public class PhoneScript : MonoBehaviour
     public enum state { pickup,dropoff,call}
     public state curState;
     public TextMeshProUGUI pickupTxt; public GameObject pickupScreen; public Color pickupTxtColor1; public Color pickupTxtColor2;
+    public GameObject gps;
     float flashTimer = 0f;
     // Start is called before the first frame update
     void Start()
@@ -36,10 +37,10 @@ public class PhoneScript : MonoBehaviour
         switch (newState) 
         {
             case state.pickup:
-                pickupScreen.SetActive(true); 
+                pickupScreen.SetActive(true); gps.SetActive(false);
                 break;
             case state.dropoff:
-                pickupScreen.SetActive(false);
+                pickupScreen.SetActive(false); gps.SetActive(true);
                 break;
             case state.call:
                 pickupScreen.SetActive(false);
