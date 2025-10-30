@@ -39,10 +39,14 @@ public class CarManager : MonoBehaviour
     public GameObject setupText1;
     public GameObject setupText2; public Image radialFillCircle; float stayStillTimer; public TextMeshProUGUI stayStillText;
     public GameObject setupText3;
+    public PhoneScript phone;
     [Header("Effects")]
     public Transform tireTreads;
+    public GameObject explosionEffect;
     [Header("Pizza Boxes")]
     public List<PizzaBoxScript> pizzas;
+    public GameObject pizzaSetPrefab;
+    public Transform pizzaSpawnPos;
     [Header("Audio")]
     public AudioSource horn;
 
@@ -160,11 +164,21 @@ public class CarManager : MonoBehaviour
         kph.text = Mathf.RoundToInt(currentSpeed*2f) + " / KPH";
         kph.transform.parent.localScale = Vector3.one * (((currentSpeed*2f)/minMaxSpeed.y)+0.8f);
     }
-    private void OnCollisionEnter(Collision collision)
+    public void Crash()
     {
-        if(collision.gameObject.tag == "Ob") { Destroy(gameObject); }
+        GameObject explosion = Instantiate(explosionEffect);
+        explosion.transform.position = transform.position;
+        explosion.transform.rotation = transform.rotation;
+        Destroy(gameObject);
     }
-
+    public void PickUpPizza()
+    {
+        pizzas.Clear();
+        if(pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
+        Instantiate(pizzaSetPrefab, pizzaSpawnPos);
+        pizzas.AddRange(pizzaSpawnPos.GetComponentsInChildren<PizzaBoxScript>());
+        phone.ChangeState(PhoneScript.state.dropoff);
+    }
     IEnumerator IntroSetUp()
     {
         setupUI.SetActive(true);
