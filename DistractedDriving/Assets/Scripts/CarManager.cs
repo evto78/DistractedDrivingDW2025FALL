@@ -141,15 +141,15 @@ public class CarManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) { CameraShake(1f); }
         if (controllerManager.buttonsPressed || Input.GetKey(KeyCode.Space)) { Honk(); } horned = controllerManager.buttonsPressed || Input.GetKey(KeyCode.Space);
 
-        if (canDrive == true && Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow ))
+        if (canDrive == true && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow )))
         {
             currentSpeed += Time.deltaTime * drivingSpeed;
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        if (canDrive == true && (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)))
         {
             currentSpeed -= Time.deltaTime * drivingSpeed;
         }
-        currentSpeed = Mathf.Clamp(currentSpeed, minMaxSpeed.x, minMaxSpeed.y);
+        currentSpeed = Mathf.Clamp(currentSpeed, minMaxSpeed.x-20, minMaxSpeed.y);
         //Tire Tracks
         bool emitTracks = currentSpeed > minMaxSpeed.y / 6f && (steeringIntensity > 0.2f || steeringIntensity < 0.2f);
         foreach (TrailRenderer tr in tireTreads.GetComponentsInChildren<TrailRenderer>()) { tr.emitting = emitTracks; }
@@ -163,7 +163,7 @@ public class CarManager : MonoBehaviour
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, currentTurn+yAngle, ((Random.Range(yAngle/8f,yAngle)/turnAngle)*currentSpeed/(minMaxSpeed.y/2f))*maxZTurn);
         foreach(PizzaBoxScript p in pizzas)
         {
-            p.currentStability += (yAngle / turnAngle) * Time.deltaTime * 1.6f;
+            p.currentStability += (yAngle / turnAngle) * Time.deltaTime * (currentSpeed/(minMaxSpeed.y/10f));
             if(p.currentStability > 0) { p.currentStability -= Time.deltaTime; }
             if(p.currentStability < 0) { p.currentStability += Time.deltaTime; }
         }

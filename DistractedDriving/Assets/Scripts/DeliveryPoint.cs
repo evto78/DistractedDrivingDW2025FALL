@@ -23,7 +23,7 @@ public class DeliveryPoint : MonoBehaviour
     {
         timer += Time.deltaTime * 4f; if (timer > 1) { timer = -1; }
         slowDownWarning.SetActive(timer > 0);
-        if (carManager.currentSpeed < 30) { slowDownWarning.SetActive(false); } else { return; }
+        if (carManager.currentSpeed < 200) { slowDownWarning.SetActive(false); } else { return; }
         if (carCollider == null) { return; }
         if (Vector3.Distance(carCollider.transform.position, transform.position) > 40) { return; }
         if (carCollider.bounds.Intersects(myCollider.bounds))
