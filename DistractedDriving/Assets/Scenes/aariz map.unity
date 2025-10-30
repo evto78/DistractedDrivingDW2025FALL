@@ -9148,7 +9148,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2078419984
 Transform:
   m_ObjectHideFlags: 0
@@ -9394,6 +9394,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Car
       objectReference: {fileID: 0}
+    - target: {fileID: 2520358443525718602, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2605348875409471740, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
       propertyPath: m_LocalPosition.x
       value: 361.5
@@ -9433,6 +9437,10 @@ PrefabInstance:
     - target: {fileID: 2605348875409471740, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943883470081174762, guid: d7303da2991c2e34d9c98636493c1425, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -8,20 +8,27 @@ public class Npc : MonoBehaviour
     public Animator anim;
     public GameObject npc;
     CarManager car;
+    ControllerManager controller;
     public GameObject granny;
+    bool canLeave = false;
 
     bool collided = false;
     void Start()
     {
         car = FindObjectOfType<CarManager>();
+        controller = FindObjectOfType<ControllerManager>();
+
     }
 
     void Update()
     {
-        if(car.canDrive == false && car.horn==true)
+        if(canLeave == true)
         {
-            anim.enabled = false;
-            car.canDrive = true;
+            if(controller.buttonsPressed || Input.GetKey(KeyCode.Space))
+            {
+                car.canDrive = true;
+                StartCoroutine(NPCRuns());
+            }
         }
     }
 
@@ -42,8 +49,16 @@ public class Npc : MonoBehaviour
         granny.SetActive(true);
         anim.enabled = true;
         //Debug.Log("NPC collided with Player");
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
         car.currentSpeed = 0;
         car.canDrive = false;
+        canLeave = true;
+    }
+
+    private IEnumerator NPCRuns()
+    {
+        anim.SetBool("isScared", true);
+        yield return new WaitForSeconds(2f);
+        granny.SetActive(false);
     }
 }
