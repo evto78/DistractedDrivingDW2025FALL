@@ -34,6 +34,7 @@ public class PizzaBoxScript : MonoBehaviour
             gone = true;
             gameObject.AddComponent<Rigidbody>().AddForce(Vector3.up * 5f, ForceMode.Impulse);
             transform.SetParent(null);
+            Destroy(gameObject, 2f);
             Destroy(this);
         }
     }
