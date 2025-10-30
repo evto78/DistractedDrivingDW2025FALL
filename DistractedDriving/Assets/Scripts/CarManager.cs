@@ -56,6 +56,8 @@ public class CarManager : MonoBehaviour
     public float deliveryTimer = 100; public Image phoneFill; public TextMeshProUGUI phoneTimer;
     public int moneyEarned = 0; public TextMeshProUGUI moneyEarnedText; public TextMeshProUGUI deadMoneyEarnedText; public GameObject deathUI;
     int deliverysMade = 1;
+    public GameObject pizzaPlayerIcon;
+    public GameObject truckPlayerIcon;
     [Header("Audio")]
     public AudioSource horn;
 
@@ -75,6 +77,7 @@ public class CarManager : MonoBehaviour
             StartCoroutine(IntroSetUp());
         }
         sm = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        truckPlayerIcon.SetActive(true);
     }
     void Update()
     {
@@ -216,6 +219,7 @@ public class CarManager : MonoBehaviour
     }
     public void PickUpPizza()
     {
+        pizzaPlayerIcon.SetActive(true); truckPlayerIcon.SetActive(false);
         if(pizzas.Count < 1) { deliveryTimer = 32f / (deliverysMade / 2f); }
         pizzas.Clear();
         if(pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
@@ -229,7 +233,7 @@ public class CarManager : MonoBehaviour
     public void Deliver()
     {
         moneyEarned += Mathf.RoundToInt(pizzas.Count * (deliveryTimer / (16f/(deliverysMade/2f))));
-
+        pizzaPlayerIcon.SetActive(false); truckPlayerIcon.SetActive(true);
 
         pizzas.Clear();
         if (pizzaSpawnPos.childCount > 0) { Destroy(pizzaSpawnPos.GetChild(0).gameObject); }
