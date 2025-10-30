@@ -5,6 +5,7 @@ using UnityEngine;
 public class CarExplosion : MonoBehaviour
 {
     List<Rigidbody> parts;
+    public Vector3 crashVel;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +15,7 @@ public class CarExplosion : MonoBehaviour
         {
             rb.transform.parent = null;
             rb.AddForce((rb.transform.position-transform.position).normalized * Random.Range(1f,10f),ForceMode.Impulse);
+            rb.AddForce(crashVel * Random.Range(0.1f,1f),ForceMode.Impulse);
             rb.AddTorque(Vector3.one*Random.Range(-6f,6f),ForceMode.Impulse);
             Destroy(rb.gameObject, 20f);
         }

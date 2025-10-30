@@ -8,6 +8,10 @@ public class DeliveryPoint : MonoBehaviour
     BoxCollider carCollider;
     BoxCollider myCollider;
 
+    public GameObject happyIcon;
+    public GameObject mildIcon;
+    public GameObject angryIcon;
+
     public GameObject slowDownWarning; float timer = 0;
     // Start is called before the first frame update
     void Start()
@@ -31,5 +35,14 @@ public class DeliveryPoint : MonoBehaviour
             carManager.Deliver();
             gameObject.SetActive(false);
         }
+    }
+    public void IconUpdate(float timeLeft)
+    {
+        happyIcon.SetActive(false);
+        mildIcon.SetActive(false);
+        angryIcon.SetActive(false);
+        if(timeLeft > 0.6f) { happyIcon.SetActive(true); }
+        else if(timeLeft > 0.3f) { mildIcon.SetActive(true); }
+        else { angryIcon.SetActive(true); }
     }
 }
