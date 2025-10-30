@@ -42,6 +42,7 @@ public class CarManager : MonoBehaviour
     public GameObject setupText2; public Image radialFillCircle; float stayStillTimer; public TextMeshProUGUI stayStillText;
     public GameObject setupText3;
     public PhoneScript phone;
+    SoundManager sm;
     [Header("Effects")]
     public Transform tireTreads;
     public GameObject explosionEffect;
@@ -72,6 +73,7 @@ public class CarManager : MonoBehaviour
             paused = true;
             StartCoroutine(IntroSetUp());
         }
+        sm = GameObject.Find("SoundManager").GetComponent<SoundManager>();
     }
     void Update()
     {
