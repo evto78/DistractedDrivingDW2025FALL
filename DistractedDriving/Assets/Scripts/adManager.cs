@@ -15,8 +15,12 @@ public class adManager : MonoBehaviour
 
     IEnumerator ShowRandomAds()
     {
-        while (true)
+        bool runAds = true;
+        while (runAds)
         {
+            // stop if ads are gone (player is dead)
+            if (loveAd == null || techAd == null) { runAds = false; yield return null; }
+
             // Turn both off first
             loveAd.SetActive(false);
             techAd.SetActive(false);
@@ -36,16 +40,19 @@ public class adManager : MonoBehaviour
                 // Enable it
                 currentAd.SetActive(true);
 
-                // Show ad for 5 seconds
-                yield return new WaitForSeconds(5f);
+                // Show ad for 3 seconds
+                yield return new WaitForSeconds(3f);
 
-                // Hide ad after 5 seconds
+                // Hide ad after 3 seconds
                 currentAd.SetActive(false);
+
+                // Wait for 3 seconds
+                yield return new WaitForSeconds(3f);
             }
             else
             {
                 // No ad — just wait the same amount of time before checking again
-                yield return new WaitForSeconds(5f);
+                yield return new WaitForSeconds(6f);
             }
         }
     }

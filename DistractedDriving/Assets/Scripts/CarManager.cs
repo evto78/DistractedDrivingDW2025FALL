@@ -55,7 +55,7 @@ public class CarManager : MonoBehaviour
     public NavMeshAgent agent; float agentTimer = 0;
     public float deliveryTimer = 100; public Image phoneFill; public TextMeshProUGUI phoneTimer;
     public int moneyEarned = 0; public TextMeshProUGUI moneyEarnedText; public TextMeshProUGUI deadMoneyEarnedText; public GameObject deathUI;
-    int deliverysMade = 1;
+    float deliverysMade = 1;
     public GameObject pizzaPlayerIcon;
     public GameObject truckPlayerIcon;
     [Header("Audio")]
@@ -243,7 +243,7 @@ public class CarManager : MonoBehaviour
         targetPoint = null;
         phone.ChangeState(PhoneScript.state.pickup);
         deliveryTimer = 32f / (deliverysMade / 2f);
-        deliverysMade++;
+        deliverysMade+=0.5f;
     }
     public void ManagePointer()
     {

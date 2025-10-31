@@ -10,8 +10,6 @@ public class Npc : MonoBehaviour
     ControllerManager controller;
     public GameObject granny;
     bool canLeave = false;
-
-    bool collided = false;
     void Start()
     {
         car = FindObjectOfType<CarManager>();
@@ -37,9 +35,6 @@ public class Npc : MonoBehaviour
         {
             Debug.Log("Player collided with NPC");
             StartCoroutine(Npcs());
-
-            collided = true;
-
         }
     }
 
