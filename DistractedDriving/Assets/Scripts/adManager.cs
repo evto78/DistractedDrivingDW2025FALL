@@ -8,13 +8,19 @@ public class adManager : MonoBehaviour
 
     private GameObject currentAd;
 
+    SoundManager sm;
+
     void Start()
     {
+        sm = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        sm.StopSoundByKey(4); //love
+        sm.StopSoundByKey(5); //tech
         StartCoroutine(ShowRandomAds());
     }
 
     IEnumerator ShowRandomAds()
     {
+        yield return new WaitForSeconds(5f);
         bool runAds = true;
         while (runAds)
         {
@@ -33,9 +39,9 @@ public class adManager : MonoBehaviour
                 int randomChoice = Random.Range(0, 2);
 
                 if (randomChoice == 0)
-                    currentAd = loveAd;
+                { currentAd = loveAd; sm.PlaySoundByKey(4); sm.ToggleLoopingSoundByKey(2); }
                 else
-                    currentAd = techAd;
+                { currentAd = techAd; sm.PlaySoundByKey(5); sm.ToggleLoopingSoundByKey(2); }
 
                 // Enable it
                 currentAd.SetActive(true);
@@ -45,14 +51,16 @@ public class adManager : MonoBehaviour
 
                 // Hide ad after 3 seconds
                 currentAd.SetActive(false);
-
+                sm.ToggleLoopingSoundByKey(2);
+                sm.StopSoundByKey(4);
+                sm.StopSoundByKey(5);
                 // Wait for 3 seconds
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(1f);
             }
             else
             {
                 // No ad — just wait the same amount of time before checking again
-                yield return new WaitForSeconds(6f);
+                yield return new WaitForSeconds(4f);
             }
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 [System.Serializable]
 public class CarManager : MonoBehaviour
 {
@@ -65,6 +66,7 @@ public class CarManager : MonoBehaviour
 
     void Start()
     {
+        joyConSteering = PlayerPrefs.GetInt("JOYMODE") == 1;
         deliveryTimer = 99999999f; phoneTimer.text = "...";
         joyConTurnProgress = 0f;
         camNormalPos = camTransform.localPosition;
@@ -81,6 +83,8 @@ public class CarManager : MonoBehaviour
     }
     void Update()
     {
+        CollisionDetection();
+
         if (paused) { return; }
 
         InputManager();
@@ -102,9 +106,7 @@ public class CarManager : MonoBehaviour
     //Honking feature
     void Honk()
     {
-        if(horn == null) { return; }
-        horn.Play();
-        Debug.Log("Honk!");
+        sm.PlaySoundByKey(3);
     }
     void Move()
     {
@@ -144,7 +146,7 @@ public class CarManager : MonoBehaviour
         }
         steeringIntensity = Mathf.Clamp(steeringIntensity, -1f, 1f);
 
-        if (Input.GetKeyDown(KeyCode.Space)) { CameraShake(1f); }
+        if (Input.GetKeyDown(KeyCode.Space)) { CameraShake(0.5f); }
         if (controllerManager.buttonsPressed || Input.GetKey(KeyCode.Space)) { Honk(); } horned = controllerManager.buttonsPressed || Input.GetKey(KeyCode.Space);
 
         if (canDrive == true && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow )))
@@ -172,6 +174,15 @@ public class CarManager : MonoBehaviour
             p.currentStability += (yAngle / turnAngle) * Time.deltaTime * (currentSpeed/(minMaxSpeed.y/10f));
             if(p.currentStability > 0) { p.currentStability -= Time.deltaTime; }
             if(p.currentStability < 0) { p.currentStability += Time.deltaTime; }
+        }
+    }
+    public void HitSomething()
+    {
+        foreach (PizzaBoxScript p in pizzas)
+        {
+            p.currentStability += Random.Range(-0.5f,0.5f) * (currentSpeed / (minMaxSpeed.y / 10f));
+            if (p.currentStability > 0) { p.currentStability -= Time.deltaTime; }
+            if (p.currentStability < 0) { p.currentStability += Time.deltaTime; }
         }
     }
     public void CameraShake(float intensity)
@@ -262,6 +273,17 @@ public class CarManager : MonoBehaviour
         }
         Destroy(agentClone.gameObject, 1f);
 
+    }
+    void CollisionDetection()
+    {
+        foreach (RaycastHit hit in Physics.BoxCastAll(transform.position, Vector3.one * 0.5f, Vector3.forward, transform.rotation, 1))
+        {
+            if(hit.collider.gameObject.TryGetComponent<CollidesWithCar>(out CollidesWithCar collideScript))
+            {
+                Debug.Log("COLLISION WITH " + collideScript.gameObject.name);
+                Crash();
+            }
+        }
     }
     IEnumerator IntroSetUp()
     {

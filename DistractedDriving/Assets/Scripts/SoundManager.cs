@@ -5,7 +5,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     List<AudioSource> sources;
-    private void Start()
+    private void Awake()
     {
         sources = new List<AudioSource>();
         for(int i = 0; i < transform.childCount; i++)
@@ -17,11 +17,15 @@ public class SoundManager : MonoBehaviour
     {
         sources[key].Play();
     }
+    public void StopSoundByKey(int key)
+    {
+        sources[key].Stop();
+    }
     public void ToggleLoopingSoundByKey(int key)
     {
         if (sources[key].isPlaying)
         {
-            sources[key].Stop();
+            sources[key].Pause();
         }
         else
         {
