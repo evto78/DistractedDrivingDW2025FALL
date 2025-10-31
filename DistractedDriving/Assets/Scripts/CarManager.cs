@@ -206,7 +206,7 @@ public class CarManager : MonoBehaviour
             targetPoint.IconUpdate(deliveryTimer / (32f / (deliverysMade / 2f)));
         }
 
-        sm.SetMotorVolAndPitch(currentSpeed, minMaxSpeed.y / 2f);
+        if (sm != null) { sm.SetMotorVolAndPitch(currentSpeed, minMaxSpeed.y / 2f); }
     }
     public void Crash()
     {
